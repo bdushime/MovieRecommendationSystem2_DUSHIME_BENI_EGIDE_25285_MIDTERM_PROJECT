@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="#{page.admin.title}">Beniflix - Admin Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
     <style>
         /* Styles for alerts */
         .alert {
@@ -273,6 +274,11 @@
 </div>
 </div>
 
+
+<div style="width: 80%; margin: 20px auto;">
+    <canvas id="auditChart"></canvas>
+</div>
+
 <h3>Audit Logs</h3>
 <table>
     <thead>
@@ -294,6 +300,86 @@
     </tr>
     </tbody>
 </table>
+
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    // Get audit logs data from Thymeleaf
+    const auditLogs = /*[[${auditLogs}]]*/ [];
+
+    // Process data for the chart
+    const actionCounts = {};
+    auditLogs.forEach(log => {
+        if (!actionCounts[log.action]) {
+            actionCounts[log.action] = 1;
+        } else {
+            actionCounts[log.action]++;
+        }
+    });
+
+    // Create arrays for chart data
+    const actions = Object.keys(actionCounts);
+    const counts = Object.values(actionCounts);
+
+    // Create the chart
+    const ctx = document.getElementById('auditChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: actions,
+            datasets: [{
+                label: 'Number of Actions',
+                data: counts,
+                backgroundColor: '#ff4757',
+                borderColor: '#ff4757',
+                borderWidth: 1,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Audit Actions Summary',
+                    color: 'white',
+                    font: {
+                        size: 16
+                    }
+                },
+                legend: {
+                    labels: {
+                        color: 'white'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: 'white'
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: 'white',
+                        maxRotation: 45,
+                        minRotation: 45
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                }
+            }
+        }
+    });
+    /*]]>*/
+</script>
 
 </body>
 </html>
