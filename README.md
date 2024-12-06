@@ -2,6 +2,9 @@ name:Dushime Beni Egide
 id:25285
 
 
+
+
+midterm:
 Link to the Overview of my system: https://www.loom.com/share/c2a969c977f34151b801bfe2e9d398f1?sid=756cead0-9c8c-447a-ad9d-847af7d8be3c
 
 note: i recorded using loom
